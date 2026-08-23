@@ -1,22 +1,20 @@
 <?php
-// Database connection
-$host = "localhost";
-$db   = "wanderlanka";
-$user = "root";
-$pass = "";
-$charset = "utf8mb4";
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
+$host = "sql104.infinityfree.com";
+$db = "if0_42725510_wanderlanka";
+$user = "if0_42725510";
+$pass = "B5IinW9yIYfT0hI";
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    $pdo = new PDO(
+        "mysql:host=$host;dbname=$db;charset=utf8mb4",
+        $user,
+        $pass
+    );
+
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 } catch (PDOException $e) {
-    exit("Database connection failed. Check config/db.php and your MySQL service.");
+    die("Database connection failed: " . $e->getMessage());
 }
 ?>

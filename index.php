@@ -11,6 +11,7 @@ $sql = "SELECT b.*, u.username
         FROM blogPost b
         JOIN user u ON b.user_id = u.id
         WHERE 1=1";
+
 $params = [];
 
 if ($category !== '') {
@@ -25,6 +26,7 @@ if ($search !== '') {
 }
 
 $sql .= " ORDER BY b.created_at DESC";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
 $posts = $stmt->fetchAll();
@@ -32,71 +34,433 @@ $posts = $stmt->fetchAll();
 require 'includes/header.php';
 ?>
 
-<section class="hero">
-    <div class="hero-content">
-        <p class="category" style="color:#a7f3d0;">SRI LANKA TRAVEL STORIES</p>
-        <h1>Discover the island beyond the map.</h1>
-        <p>Travel guides, destination stories and unforgettable experiences from Sri Lanka.</p>
-        <a class="btn" href="#latest">Explore Stories</a>
+<!-- =========================================================
+     HERO SLIDER
+========================================================= -->
+
+<section class="hero-slider">
+
+    <!-- Slide 1 -->
+    <div class="hero-slide active">
+
+        <img
+            src="assets/images/image2.jpg"
+            alt="Sri Lanka landscape"
+        >
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <p class="hero-category">
+                SRI LANKA TRAVEL STORIES
+            </p>
+
+            <h1>
+                Discover the island
+                <br>
+                beyond the map.
+            </h1>
+
+            <p>
+                Travel guides, destination stories and unforgettable
+                experiences from Sri Lanka.
+            </p>
+
+            <a class="hero-btn" href="#latest">
+                Explore Stories
+            </a>
+
+        </div>
     </div>
+
+
+    <!-- Slide 2 -->
+    <div class="hero-slide">
+
+        <img
+            src="assets/images/image1.avif"
+            alt="Sri Lanka mountains"
+        >
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <p class="hero-category">
+                EXPLORE SRI LANKA
+            </p>
+
+            <h1>
+                Where every journey
+                <br>
+                tells a story.
+            </h1>
+
+            <p>
+                From misty mountains to beautiful coastlines,
+                discover places worth remembering.
+            </p>
+
+            <a class="hero-btn" href="#latest">
+                Explore Stories
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Slide 3 -->
+    <div class="hero-slide">
+
+        <img
+            src="assets/images/image3.jpeg"
+            alt="Sri Lanka beach"
+        >
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <p class="hero-category">
+                UNFORGETTABLE EXPERIENCES
+            </p>
+
+            <h1>
+                See Sri Lanka
+                <br>
+                differently.
+            </h1>
+
+            <p>
+                Discover hidden places, local experiences
+                and unforgettable adventures.
+            </p>
+
+            <a class="hero-btn" href="#latest">
+                Explore Stories
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Slide 4 -->
+    <div class="hero-slide">
+
+        <img
+            src="assets/images/image4.jpeg"
+            alt="Sri Lanka cultural heritage"
+        >
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <p class="hero-category">
+                CULTURE & HERITAGE
+            </p>
+
+            <h1>
+                Experience the soul
+                <br>
+                of Sri Lanka.
+            </h1>
+
+            <p>
+                Explore ancient cities, rich traditions,
+                local culture and authentic island life.
+            </p>
+
+            <a class="hero-btn" href="#latest">
+                Explore Stories
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- Previous Arrow -->
+    <button
+        class="slider-arrow prev"
+        onclick="changeSlide(-1)"
+        aria-label="Previous slide"
+    >
+        &#10094;
+    </button>
+
+
+    <!-- Next Arrow -->
+    <button
+        class="slider-arrow next"
+        onclick="changeSlide(1)"
+        aria-label="Next slide"
+    >
+        &#10095;
+    </button>
+
+
+    <!-- Slide Indicators -->
+    <div class="slider-dots">
+
+        <button
+            class="slider-dot active"
+            onclick="goToSlide(0)"
+            aria-label="Go to slide 1"
+        ></button>
+
+        <button
+            class="slider-dot"
+            onclick="goToSlide(1)"
+            aria-label="Go to slide 2"
+        ></button>
+
+        <button
+            class="slider-dot"
+            onclick="goToSlide(2)"
+            aria-label="Go to slide 3"
+        ></button>
+
+        <button
+            class="slider-dot"
+            onclick="goToSlide(3)"
+            aria-label="Go to slide 4"
+        ></button>
+
+    </div>
+
 </section>
 
+
+<!-- =========================================================
+     LATEST BLOG POSTS
+========================================================= -->
+
 <div class="container" id="latest">
+
     <div class="section-head">
+
         <div>
-            <p class="category">WanderLanka Journal</p>
-            <h2><?= $category ? e($category) : 'Latest Journeys' ?></h2>
+
+            <p class="category">
+                WanderLanka Journal
+            </p>
+
+            <h2>
+                <?= $category ? e($category) : 'Latest Journeys' ?>
+            </h2>
+
         </div>
+
+
         <?php if (isLoggedIn()): ?>
-            <a class="btn" href="create.php">+ New Blog</a>
+
+            <a class="btn" href="create.php">
+                + New Blog
+            </a>
+
         <?php endif; ?>
+
     </div>
 
-    <form method="get" style="display:flex; gap:10px; margin-bottom:25px;">
-        <?php if ($category): ?><input type="hidden" name="category" value="<?= e($category) ?>"><?php endif; ?>
-        <input name="search" value="<?= e($search) ?>" placeholder="Search travel stories...">
-        <button class="btn" type="submit">Search</button>
+
+    <!-- Search -->
+
+    <form
+        method="get"
+        style="
+            display:flex;
+            gap:10px;
+            margin-bottom:25px;
+        "
+    >
+
+        <?php if ($category): ?>
+
+            <input
+                type="hidden"
+                name="category"
+                value="<?= e($category) ?>"
+            >
+
+        <?php endif; ?>
+
+
+        <input
+            name="search"
+            value="<?= e($search) ?>"
+            placeholder="Search travel stories..."
+        >
+
+
+        <button
+            class="btn"
+            type="submit"
+        >
+            Search
+        </button>
+
     </form>
 
+
+    <!-- Blog Posts -->
+
     <?php if (!$posts): ?>
+
         <div class="empty">
-            <h3>No blog posts found</h3>
-            <p>Register and create the first WanderLanka story.</p>
+
+            <h3>
+                No blog posts found
+            </h3>
+
+            <p>
+                Register and create the first
+                WanderLanka story.
+            </p>
+
         </div>
+
     <?php else: ?>
+
+
         <div class="grid">
+
             <?php foreach ($posts as $post): ?>
+
                 <article class="card">
-                    <img class="card-image"
-                         src="<?= e($post['image'] ?: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80') ?>"
-                         alt="<?= e($post['title']) ?>">
+
+                    <img
+                        class="card-image"
+                        src="<?= e(
+                            $post['image']
+                            ?: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=80'
+                        ) ?>"
+                        alt="<?= e($post['title']) ?>"
+                    >
+
+
                     <div class="card-body">
-                        <div class="category"><?= e($post['category']) ?></div>
-                        <h3><a href="post.php?id=<?= (int)$post['id'] ?>"><?= e($post['title']) ?></a></h3>
-                        <p class="meta">By <?= e($post['username']) ?> · <?= date('d M Y', strtotime($post['created_at'])) ?></p>
-                        <p style="margin-top:12px;">
-                            <?= e(mb_strimwidth(preg_replace('/\s+/', ' ', $post['content']), 0, 125, '...')) ?>
+
+                        <div class="category">
+                            <?= e($post['category']) ?>
+                        </div>
+
+
+                        <h3>
+
+                            <a
+                                href="post.php?id=<?= (int)$post['id'] ?>"
+                            >
+                                <?= e($post['title']) ?>
+                            </a>
+
+                        </h3>
+
+
+                        <p class="meta">
+
+                            By
+                            <?= e($post['username']) ?>
+
+                            ·
+
+                            <?= date(
+                                'd M Y',
+                                strtotime($post['created_at'])
+                            ) ?>
+
                         </p>
+
+
+                        <p style="margin-top:12px;">
+
+                            <?= e(
+                                mb_strimwidth(
+                                    preg_replace(
+                                        '/\s+/',
+                                        ' ',
+                                        $post['content']
+                                    ),
+                                    0,
+                                    125,
+                                    '...'
+                                )
+                            ) ?>
+
+                        </p>
+
                     </div>
+
                 </article>
+
             <?php endforeach; ?>
+
         </div>
+
     <?php endif; ?>
 
+
+    <!-- =====================================================
+         TRAVEL INTERESTS
+    ====================================================== -->
+
     <section style="margin-top:55px;">
+
         <div class="section-head">
+
             <div>
-                <p class="category">Explore</p>
-                <h2>Travel by Interest</h2>
+
+                <p class="category">
+                    Explore
+                </p>
+
+                <h2>
+                    Travel by Interest
+                </h2>
+
             </div>
+
         </div>
+
+
         <div class="categories">
-            <a class="category-box" href="index.php?category=Destinations">Destinations</a>
-            <a class="category-box" href="index.php?category=Travel%20Guides">Travel Guides</a>
-            <a class="category-box" href="index.php?category=Experiences">Experiences</a>
-            <a class="category-box" href="index.php?category=Travel%20Stories">Travel Stories</a>
+
+            <a
+                class="category-box"
+                href="index.php?category=Destinations"
+            >
+                Destinations
+            </a>
+
+
+            <a
+                class="category-box"
+                href="index.php?category=Travel%20Guides"
+            >
+                Travel Guides
+            </a>
+
+
+            <a
+                class="category-box"
+                href="index.php?category=Experiences"
+            >
+                Experiences
+            </a>
+
+
+            <a
+                class="category-box"
+                href="index.php?category=Travel%20Stories"
+            >
+                Travel Stories
+            </a>
+
         </div>
+
     </section>
+
 </div>
+
 
 <?php require 'includes/footer.php'; ?>
